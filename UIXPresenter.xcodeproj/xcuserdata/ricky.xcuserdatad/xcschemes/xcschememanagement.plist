@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Presenter.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>UIXPresenter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>9C329ED31EE53394001E98F1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9C329EE81EE5340F001E98F1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
