@@ -7,19 +7,24 @@
 //
 
 import UIKit
+import UIXPresenter
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        let button = UIButton(type: .system)
+        button.setTitle("Show", for: .normal)
+        button.addTarget(self, action: #selector(showOverlay(sender:)), for: .touchUpInside)
+        view.addSubview(button)
+        button.centerToSuperview()
     }
-
+    
+    func showOverlay(sender: Any) {
+        let overlayVC = UIXOverlayViewController()
+        presentCustom(overlayVC, animated: true, completion: nil)
+    }
 
 }
 
