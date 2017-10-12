@@ -18,10 +18,12 @@ class ViewController: UIViewController {
         button.setTitle("Show", for: .normal)
         button.addTarget(self, action: #selector(showOverlay(sender:)), for: .touchUpInside)
         view.addSubview(button)
-        button.centerToSuperview()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        button.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
-    func showOverlay(sender: Any) {
+    @objc func showOverlay(sender: Any) {
         let overlayVC = UIXOverlayViewController()
         presentCustom(overlayVC, animated: true, completion: nil)
     }

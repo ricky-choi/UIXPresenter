@@ -136,7 +136,7 @@ class UIXOverlayPresentationController: UIPresentationController {
         self.dimmingView = dimmingView
     }
     
-    func dimmingViewTapped(_ gesture: UITapGestureRecognizer) {
+    @objc func dimmingViewTapped(_ gesture: UITapGestureRecognizer) {
         if gesture.state == .recognized {
             presentingViewController.dismiss(animated: true, completion: nil)
         }

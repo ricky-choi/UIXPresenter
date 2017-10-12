@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import IUExtensions
 
 protocol UIXPresenter {
     var statusBarHidden: Bool { get }
@@ -199,7 +198,7 @@ open class UIXOverlayViewController: UIViewController, UIXPresenter {
     
     let useBanding = false
     
-    func panGesture(_ gesture: UIPanGestureRecognizer) {
+    @objc func panGesture(_ gesture: UIPanGestureRecognizer) {
         guard let presentationController = presentationController as? UIXOverlayPresentationController else {
             return
         }
@@ -445,7 +444,9 @@ open class UIXOverlayViewController: UIViewController, UIXPresenter {
         let originalScrollInset = scrollView.contentInset
         let newScrollInset = UIEdgeInsets(top: originalScrollInset.top, left: originalScrollInset.left, bottom: newInsetBottom, right: originalScrollInset.right)
         
-        scrollView.setInset(newScrollInset)
+        scrollView.contentInset = newScrollInset
+        scrollView.scrollIndicatorInsets = newScrollInset
+        
     }
     
     func adjustScrollInset() {
@@ -483,11 +484,11 @@ open class UIXOverlayViewController: UIViewController, UIXPresenter {
 }
 
 extension UIXOverlayViewController {
-    func keyboardWillHide(_ aNotification: Notification) {
+    @objc func keyboardWillHide(_ aNotification: Notification) {
         keyboardAnimation(aNotification, isShow: false)
     }
     
-    func keyboardWillShow(_ aNotification: Notification) {
+    @objc func keyboardWillShow(_ aNotification: Notification) {
         keyboardAnimation(aNotification, isShow: true)
     }
     
@@ -507,7 +508,7 @@ extension UIXOverlayViewController {
 }
 
 extension UIXOverlayViewController {
-    func showExtendView(_ contentView: UIView, margin: ACDMargin = ACDMarginZero, height: CGFloat = 150, showClose: Bool = true, backgroundColor: UIColor = UIColor(white: 0, alpha: 0.4), heightOffset: CGFloat = 0) {
+    func showExtendView(_ contentView: UIView, margin: UIEdgeInsets = .zero, height: CGFloat = 150, showClose: Bool = true, backgroundColor: UIColor = UIColor(white: 0, alpha: 0.4), heightOffset: CGFloat = 0) {
         
         removeExtendView()
         
@@ -515,12 +516,14 @@ extension UIXOverlayViewController {
         let extendView = UIView()
         extendView.backgroundColor = backgroundColor
         view.addSubview(extendView)
+        extendView.translatesAutoresizingMaskIntoConstraints = false
+        extendView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        extendView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        extendView.fillXToSuperview()
         if height <= 0 {
             NSLayoutConstraint(item: extendView, attribute: .top, relatedBy: .equal, toItem: view.superview, attribute: .top, multiplier: 1, constant: -heightOffset).isActive = true
         } else {
-            extendView.fixHeight(height)
+            extendView.heightAnchor.constraint(equalToConstant: height).isActive = true
         }
         
         NSLayoutConstraint(item: extendView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: heightOffset).isActive = true
@@ -529,7 +532,11 @@ extension UIXOverlayViewController {
         
         // content
         extendView.addSubview(contentView)
-        contentView.fillToSuperview(margin)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.leadingAnchor.constraint(equalTo: extendView.leadingAnchor, constant: margin.left).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: extendView.trailingAnchor, constant: margin.right).isActive = true
+        contentView.topAnchor.constraint(equalTo: extendView.topAnchor, constant: margin.top).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: extendView.bottomAnchor, constant: margin.bottom).isActive = true
         
         if showClose {
             
@@ -555,7 +562,7 @@ extension UIXOverlayViewController {
         }
     }
     
-    func extendViewCloseButtonTouched(_ sender: AnyObject) {
+    @objc func extendViewCloseButtonTouched(_ sender: AnyObject) {
         removeExtendView()
     }
     
@@ -563,8 +570,10 @@ extension UIXOverlayViewController {
         let rubberBandView = UIView()
         rubberBandView.backgroundColor = color
         view.insertSubview(rubberBandView, at: 0)
-        rubberBandView.fillXToSuperview()
-        rubberBandView.fixHeight(UIScreen.main.bounds.height)
+        rubberBandView.translatesAutoresizingMaskIntoConstraints = false
+        rubberBandView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        rubberBandView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        rubberBandView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
         NSLayoutConstraint(item: rubberBandView, attribute: .top, relatedBy: .equal, toItem: rubberBandView.superview, attribute: .bottom, multiplier: 1, constant: -1).isActive = true
         
         self.rubberBandView = rubberBandView
