@@ -78,12 +78,12 @@ open class UIXOverlayViewController: UIViewController, UIXPresenter {
             let notificationCenter = NotificationCenter.default
             if observeKeyboard {
                 // register notification
-                notificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
-                notificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: .UIKeyboardWillHide, object: nil)
+                notificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+                notificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
             } else {
                 // remove notification
-                notificationCenter.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
-                notificationCenter.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+                notificationCenter.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+                notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
             }
         }
     }
@@ -494,7 +494,7 @@ extension UIXOverlayViewController {
     
     func keyboardAnimation(_ aNotification: Notification, isShow: Bool) {
         let userInfo: NSDictionary = (aNotification as NSNotification).userInfo! as NSDictionary
-        let keyboardFrame: CGRect = (userInfo.object(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue).cgRectValue
+        let keyboardFrame: CGRect = (userInfo.object(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue).cgRectValue
         
         let viewSize = view.frame.size
         view.frame = CGRect(x: 0, y: keyboardFrame.origin.y - viewSize.height, width: viewSize.width, height: viewSize.height)
